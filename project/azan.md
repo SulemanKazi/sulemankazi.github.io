@@ -1,1 +1,0 @@
-## Azan around the world!
