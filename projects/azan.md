@@ -1,6 +1,6 @@
 ## (Dis?)proving a claim about the Muslim call to prayer - Azan
 
-<iframe src="https://giphy.com/embed/sFgvfo0O6S4iYLl0uB" width="480" height="274" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/world-map-azan-sFgvfo0O6S4iYLl0uB">via GIPHY</a></p>
+<iframe src="https://giphy.com/embed/sFgvfo0O6S4iYLl0uB" width="800" height="457" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p>
 
 I read an article about a decade ago which claimed that there is no time on Earth that the Azan (The Muslim call to the five daily prayers, see details below) is not happening somewhere around the globe.
 
