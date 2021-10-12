@@ -1,6 +1,9 @@
-## (Dis?)proving a claim about the Muslim call to prayer - Azan
+## Investigating a claim about the Muslim call to prayer with Python and Open Data
 
 <iframe src="https://giphy.com/embed/sFgvfo0O6S4iYLl0uB" width="800" height="457" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p>
+
+* Table of Contents
+{:toc}
 
 I read an article about a decade ago which claimed that there is no time on Earth that the Azan (The Muslim call to the five daily prayers, see details below) is not happening somewhere around the globe.
 
@@ -10,7 +13,7 @@ Trying to search for any evidence for this claim led to the same unsubstantiated
 
 Muslims pray five times a day, each prayer is to be performed during a specific interval of the day, determined by the position of the sun. The timings are not fixed (wrt the 24 hour clock) and move as the length of the day and night change throughout the year. The Azan occurs at the start of each interval for the five prayers.
 
-There are slight [difference](https://www.calislamic.com/fifteen-or-eighteen-degrees-calculating-prayer-and-fasting-times-in-islam/) in the way the solar angles are calculated for Fajr/Isha prayers, in addition there are [edge cases](https://www.astronomycenter.net/accut.html#alt) at higher latitudes which have to be treated differently.
+There are slight [differences](https://www.calislamic.com/fifteen-or-eighteen-degrees-calculating-prayer-and-fasting-times-in-islam/) in the way the solar angles are calculated for Fajr/Isha prayers, in addition there are [edge cases](https://www.astronomycenter.net/accut.html#alt) at higher latitudes which have to be treated differently.
 
 ## The Process
 
