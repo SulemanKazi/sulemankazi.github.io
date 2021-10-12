@@ -1,5 +1,7 @@
 ## (Dis?)proving a claim about the Muslim call to prayer - Azan
 
+<iframe src="https://giphy.com/embed/sFgvfo0O6S4iYLl0uB" width="480" height="274" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/world-map-azan-sFgvfo0O6S4iYLl0uB">via GIPHY</a></p>
+
 I read an article about a decade ago which claimed that there is no time on Earth that the Azan (The Muslim call to the five daily prayers, see details below) is not happening somewhere around the globe.
 
 Trying to search for any evidence for this claim led to the same unsubstantiated [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe)description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. I am curious to know if the claim is true. Let&#39;s walk through how we can use python, freely available datasets and some heuristics to prove/disprove this and see what we find!
