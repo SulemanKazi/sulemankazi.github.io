@@ -1,17 +1,17 @@
-## Investigating a claim about the Muslim call to prayer with Python and Open Data
+## Testing a claim about the Muslim call to prayer with Python and Open Data
 
-<iframe src="https://giphy.com/embed/sFgvfo0O6S4iYLl0uB" width="800" height="457" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/IQg3wbQmg7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 * Table of Contents
 {:toc}
 
-I read an article about a decade ago which claimed that there is no time on Earth that the Azan (The Muslim call to the five daily prayers, see details below) is not happening somewhere around the globe.
+The original purpose of this experiment was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe in a period of 24H as in the visualization seen above. However after doing that, I remembered that I read an article about a decade ago which claimed that there is no time on Earth that the Azan is not happening somewhere on the globe.
 
-Trying to search for any evidence for this claim led to the same unsubstantiated [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe)description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. I am curious to know if the claim is true. Let&#39;s walk through how we can use python, freely available datasets and some heuristics to prove/disprove this and see what we find!
+Trying to search for any evidence for this claim led to an unsubstantiated, [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe)description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. I am curious to know if the claim is true. Let&#39;s walk through how we can use python, freely available open datasets and some heuristics to prove/disprove this and see what we find!
 
 ## Azan Basics
 
-Muslims pray five times a day, each prayer is to be performed during a specific interval of the day, determined by the position of the sun. The timings are not fixed (wrt the 24 hour clock) and move as the length of the day and night change throughout the year. The Azan occurs at the start of each interval for the five prayers.
+Muslims pray five times a day, each prayer is to be performed during a specific interval of the day, determined by the position of the sun. The timings are not fixed (wrt the 24 hour clock) and change as the length of the day and night vary throughout the year. The Azan occurs at the start of each interval for the five prayers.
 
 There are slight [differences](https://www.calislamic.com/fifteen-or-eighteen-degrees-calculating-prayer-and-fasting-times-in-islam/) in the way the solar angles are calculated for Fajr/Isha prayers, in addition there are [edge cases](https://www.astronomycenter.net/accut.html#alt) at higher latitudes which have to be treated differently.
 
@@ -23,11 +23,11 @@ In order to determine if the original claim is true we have to:
 - Determine **Azan times** at alllocations from step 1 for 365 days of the year.
 - Determine if there is any minute in the 525600 minutes of the year where **none** of the locations above have the Azan happening.
 
-We will use some approximations for all of the steps above, which we&#39;ll walk through below. All assumptions made are preceded by the _[Assumption]_ tag.
+We will use some approximations for all of the steps above, which we'll walk through below. All assumptions made are preceded by the _[Assumption]_ tag.
 
 ## Where does the Azan occur?
 
-Ok first things first, we can&#39;t expect the Azan to occur at every single point on the globe. The Azan is given whenever muslims pray **in**** congregation**. A good proxy for prayer in congregation is a mosque _[Assumption]_ (although muslims frequently pray in congregation outside of mosques as well). Ok great, so we need a dataset of all mosques in the world! Such a thing unfortunately does not exist. However a [Deloitte study](https://www2.deloitte.com/xe/en/pages/financial-services/articles/the-digital-islamic-services-landscape.html) estimates there are 3.6 million mosques around the world (Expected to reach 3.85 million by 2019). Thus when the study was conducted there was 1 mosque for every 500 muslims in the world.
+Ok first things first, we can't expect the Azan to occur at every single point on the globe. The Azan is given whenever muslims pray **in**** congregation**. A good proxy for prayer in congregation is a mosque _[Assumption]_ (although muslims frequently pray in congregation outside of mosques as well). Ok great, so we need a dataset of all mosques in the world! Such a thing unfortunately does not exist. However a [Deloitte study](https://www2.deloitte.com/xe/en/pages/financial-services/articles/the-digital-islamic-services-landscape.html) estimates there are 3.6 million mosques around the world (Expected to reach 3.85 million by 2019). Thus when the study was conducted there was 1 mosque for every 500 muslims in the world.
 
 The [GeoNames](https://www.geonames.org/) geographical database provides a list of cities around the globe with a population of \&gt;1000, along with their lat/longs and estimated population. Combining this with PEW&#39;s [estimate](https://www.pewforum.org/2015/04/02/religious-projection-table/2020/percent/all/) of religious composition a the country level, we can multiply the city population with the muslim %age to find the estimated number of muslims in each city _[Assumption]_ Here we&#39;re ignoring all rural (non-city) areas and assuming that the PEW country-based %age of muslims is applicable to all cities in the country. We&#39;re also assuming every city \&gt; 1000 muslims will have a mosque (or a prayer in congregation). Some Googe-Maps searches for mosques in a randomly selected sample of such citeis shows that this assumption is reasonable, and most of them do indeed have mosques. The only exception I found to this rule was in places where the PEW survey had estimated a Muslim population of 1%. I assume this happened because PEW rounds up all population numbers in the range [0 - 1]% to 1%.
 
@@ -56,11 +56,11 @@ Let&#39;s visualize what we have so far, i.e. Azan locations around the globe. W
 
 ## Results
 
-There is no time during the year where the Azan isn&#39;t occurring somewhere on the globe.\*
+There is no time during the year where the Azan isn't occurring somewhere on the globe.
 
 Based on the experiment above, checking every minute of every day of the year, we find that there is **no minute** where the Azan isn&#39;t occurring somewhere on Earth. There are 11 (non-contiguous) minutes in the whole year where it occurs at only three cities, but I have manually verified the presence of a mosque **in** or **near** those cities.
 
-There we have it! An answer to a question I had a decade ago. Keeping in mind we made some assumptions this ofcourse isn&#39;t a **definitive** answer, but it&#39;s a good enough approximation for me to be confident that the results are meaningful!
+There we have it! An answer to a question I had a decade ago. Keeping in mind we made some assumptions this ofcourse isn't a **definitive** answer, but it&#39;s a good enough approximation for me to be confident that the results are meaningful!
 
 ## Source Code
 
