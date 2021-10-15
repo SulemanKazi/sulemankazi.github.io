@@ -1,4 +1,4 @@
-## Testing and visualizing a claim about the muslim call to prayer with python, kepler.gl, and open data
+## Testing a claim about the muslim call to prayer with open data
 
 * Table of Contents
 {:toc}
