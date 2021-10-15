@@ -1,4 +1,4 @@
-## Testing a claim about the muslim call to prayer with python, pandas and open data
+## Testing and visualizing a claim about the muslim call to prayer with python, kepler.gl, and open data
 
 * Table of Contents
 {:toc}
@@ -24,11 +24,11 @@ In order to determine if the original claim is true we have to:
 2. Determine **Azan times** at all locations from step 1 for every day of the year.
 3. Determine if there is any time during the entire year where **none** of the locations above have the Azan happening.
 
-We will use some assumptions during this process, which we'll walk through below. All assumptions made are preceded by the _[Assumption]_ tag.
+We will use some assumptions during this process, which we'll walk through below. All assumptions made are preceded by the _[Assumption]_  tag.
 
 ### 1. Determine locations where the Azan occurs
 
-Ok first things first, we can't expect the Azan to occur at every single point on the globe. The Azan is given whenever muslims pray **in congregation**. _[Assumption]_ A good proxy for prayer in congregation (and hence a place where the Azan occurs) is a mosque, although muslims frequently pray in congregation outside of mosques as well. Ok great, so we need a way to determine where all mosques are in the world! Such a thing unfortunately does not exist. However a [Deloitte study](https://www2.deloitte.com/xe/en/pages/financial-services/articles/the-digital-islamic-services-landscape.html) estimated there were 3.6 million mosques around the world, projected to reach 3.85 million by 2019. Thus when the study was conducted there was 1 mosque for every 500 muslims in the world.
+Ok first things first, we can't expect the Azan to occur at every single point on the globe. The Azan is given whenever muslims pray **in congregation**. _[Assumption]_  A good proxy for prayer in congregation (and hence a place where the Azan occurs) is a mosque, although muslims frequently pray in congregation outside of mosques as well. Ok great, so we need a way to determine where all mosques are in the world! Such a thing unfortunately does not exist. However a [Deloitte study](https://www2.deloitte.com/xe/en/pages/financial-services/articles/the-digital-islamic-services-landscape.html) estimated there were 3.6 million mosques around the world, projected to reach 3.85 million by 2019. Thus when the study was conducted there was 1 mosque for every 500 muslims in the world.
 
 The [GeoNames](https://www.geonames.org/) geographical database provides a list of cities around the globe with a population of >1000, along with their lat/longs and estimated population. Here's what it looks like:
 
@@ -42,12 +42,12 @@ We can combine this with the GeoNames dataset. i.e. multiply the city population
 
 Ok, now we need to verify that our assumptions make sense. Some Googe-Maps searches for "mosque" in a randomly selected sample of the cities we find using the criteria above shows that this assumption is reasonable, and most of them do indeed have mosques. The only exception I found to this rule was in places where the PEW survey had estimated a Muslim population of 1%. I assume this happened because PEW rounds up all population numbers in the range [0 - 1]% to 1%, so we'll special case such countries, and our final heuristic for filtering cities will be:
 
-1. If a country has a >1% Muslim population:
-  1. Only include cities where the estimated muslim population in the city >1000
-2. If a country has a <=1% Muslim population:
-  1. Only include **big** cities (population > 1 million).
-3. If a city's population is unavailable (which is the case for some cities in the GeoNames dataset):
-  1. Only include cities in countries with a muslim population >50%
+* If a country has a >1% Muslim population:
+  * Only include cities where the estimated muslim population in the city >1000
+* If a country has a <=1% Muslim population:
+  * Only include **big** cities (population > 1 million).
+* If a city's population is unavailable (which is the case for some cities in the GeoNames dataset):
+  * Only include cities in countries with a muslim population >50%
 
 Our final heuristic is tuned towards **precision** rather than **recall**, since the criteria for inclusion is strict and we're less concerned with missing some cities with mosques/muslims-praying-in-congregation, and more concerned about our heuristic being strict enough to not over-count. The original dataset has more ~1.2 Million cities, after applying our filter, we're left with just **23006**. These cities are mapped using kepler.gl in the image below, the colour represents the country they are located in, the size is weighted by population:
 
