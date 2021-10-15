@@ -3,9 +3,11 @@
 * Table of Contents
 {:toc}
 
-The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe in a period of 24-hours, as in the visualization seen below. However after finishing the visualization, I remembered that I read an article about a decade ago which claimed that there is no time during the year when the Azan is not happening somewhere on the globe.
+The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe in a period of 24-hours. However after finishing the visualization, I remembered that I read an article about a decade ago which claimed that there is no time during the year when the Azan is not happening somewhere on the globe.
 
 <p align="center"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/IQg3wbQmg7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+<p align="center"> 
+<p align="center"> _This video shows how the Azan moves across the world during a 24H period for a given date_ </p>
 
 Trying to search for any evidence for this claim led to an unsubstantiated, [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe) description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. I am curious to know if the claim is true. Let's walk through how we can use python, freely available open datasets and some heuristics to prove/disprove this and see what we find! All source code is open and reproducible.
 
@@ -31,11 +33,11 @@ Ok first things first, we can't expect the Azan to occur at every single point o
 
 The [GeoNames](https://www.geonames.org/) geographical database provides a list of cities around the globe with a population of >1000, along with their lat/longs and estimated population. Here's what it looks like:
 
-![GeoNames Cities](/img/geonames_df.png)
+![GeoNames Cities](/imgs/azan/geonames_df.png)
 
 PEW has a [dataset](https://www.pewforum.org/2015/04/02/religious-projection-table/2020/percent/all/) of religious composition of countries around the world.
 
-![PEW Composition](/img/pew_df.png)
+![PEW Composition](/imgs/azan/pew_df.png)
 
 We can combine this with the GeoNames dataset. i.e. multiply the city population from GeoNames with the muslim percentage in the country the city is in to find the estimated number of muslims in each city. _[Assumption]_ We're ignoring all rural (non-city) areas and assuming that the PEW country-wide percentages are applicable to cities. Since this assumption is in all likelihood, not valid, we'll compensate for it by only considering cities with >1000 muslims, double the 1:500 mosque:muslim ratio we saw above (and Assuming such cities will have a mosque or a prayer in congregation). 
 
@@ -48,7 +50,9 @@ Ok, now we need to verify that our assumptions make sense. Some Googe-Maps searc
 3. If a city's population is unavailable (which is the case for some cities in the GeoNames dataset):
   1. Only include cities in countries with a muslim population >50%
 
-Our final heuristic is tuned towards **precision** rather than **recall**, since the criteria for inclusion is strict and we're less concerned with missing some cities with mosques/muslims-praying-in-congregation, and more concerned about our heuristic being strict enough to not over-count. The original dataset has **120680** cities, after applying our filter, we're left with just **23006**.
+Our final heuristic is tuned towards **precision** rather than **recall**, since the criteria for inclusion is strict and we're less concerned with missing some cities with mosques/muslims-praying-in-congregation, and more concerned about our heuristic being strict enough to not over-count. The original dataset has more ~1.2 Million cities, after applying our filter, we're left with just **23006**. These cities are mapped using kepler.gl in the image below, the colour represents the country they are located in, the size is weighted by population:
+
+![A map of filtered cities](/imgs/azan/all_cities.png)
 
 ### 2. Determine Azan times at all locations
 
@@ -56,18 +60,19 @@ As we saw above there are a few different ways and edge-cases in calculating Aza
 
 Since the PrayTime library also provides sunrise/sunset times, we're able to sanity check the output by selecting a few random locations and ensuring that the times predicted by the library are within a minute of publicly available sunrise/sunset times. I also cross-checked Azan times at several cities with publicly available prayer times and found them to be accurate.
 
-![Sunrise/Sunset Verification](/img/sunrise_sunset_verification.png)
+![Sunrise/Sunset Verification](/imgs/azan/sunset_tokyo.png)
+_This image shows the sunset time from PrayerTime matches the sunset time from Google to the exact minute (The time on the map is GMT)_
 
 
 ### 3. Visualizing Azan times
 
 Let's visualize what we have so far, since it makes for a nice way of conceptualizing how prayer times move around the world. We'll do this for one day of the year. I discovered [kepler.gl](http://kepler.gl/) (thanks Uber!) which makes it super-simple to visualize geo-data and supports visualization from a CSV file which makes life easy since we've been using Pandas dataframes for our work. Here's what the dataframe that we will export to Kepler looks like:
 
-![Kepler DF](/img/kepler_df.png)
+![Kepler DF](/imgs/azan/kepler_df.png)
 
 After uploading the data, this is what we end up with (for a given time range):
 
-![Kepler Visualization](/img/kepler_visualization.png)
+![Kepler Visualization](/img/kepler_vis.png)
 
 Each dot represents one of our filtered cities at the time (within our range) when Azan occurs there, the color represents which of the five prayers the Azan is for. The video at the top of this article shows this animated for one day. Someone with more webdev experience can probably make this into a live-view thing where there's a live map hosted showing you where in the world the Azan is occuring in realtime.
 
