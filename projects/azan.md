@@ -3,11 +3,10 @@
 * Table of Contents
 {:toc}
 
-The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe in a period of 24-hours. However after finishing the visualization, I remembered that I read an article about a decade ago which claimed that there is no time during the year when the Azan is not happening somewhere on the globe.
+The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe in a period of 24-hours. However after finishing the visualization, I remembered that I read an article about a decade ago which claimed that there is no time during the year when the Azan is not happening somewhere on the globe. This visualization I made is in the video below and shows how the Azan moves across the world during a 24H period for a given date:
 
 <p align="center"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/IQg3wbQmg7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
-<p align="center"> 
-<p align="center"> _This video shows how the Azan moves across the world during a 24H period for a given date_ </p>
+<p align="center"> </p>
 
 Trying to search for any evidence for this claim led to an unsubstantiated, [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe) description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. I am curious to know if the claim is true. Let's walk through how we can use python, freely available open datasets and some heuristics to prove/disprove this and see what we find! All source code is open and reproducible.
 
@@ -72,7 +71,7 @@ Let's visualize what we have so far, since it makes for a nice way of conceptual
 
 After uploading the data, this is what we end up with (for a given time range):
 
-![Kepler Visualization](/img/kepler_vis.png)
+![Kepler Visualization](/imgs/azan/kepler_vis.png)
 
 Each dot represents one of our filtered cities at the time (within our range) when Azan occurs there, the color represents which of the five prayers the Azan is for. The video at the top of this article shows this animated for one day. Someone with more webdev experience can probably make this into a live-view thing where there's a live map hosted showing you where in the world the Azan is occuring in realtime.
 
