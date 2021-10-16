@@ -83,7 +83,7 @@ There we have it! An answer to a question I had a decade ago. Keeping in mind we
 
 ## Source Code
 
-All source code and links to datasets are available in this github repository.
+All source code and links to datasets are available in this [github repository](https://github.com/SulemanKazi/AzanVis).
 
 ## References
 
