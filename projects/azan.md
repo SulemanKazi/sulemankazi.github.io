@@ -3,8 +3,6 @@
 * Table of Contents
 {:toc}
 
-![A map of filtered cities](/imgs/azan/all_cities.png)
-
 The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe in a period of 24-hours. However after finishing the visualization, I remembered that I read an article about a decade ago which claimed that there is no time during the year when the Azan is not happening somewhere on the globe. This visualization I made is in the video below and shows how the Azan moves across the world during a 24H period for a given date:
 
 <p align="center"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/IQg3wbQmg7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
