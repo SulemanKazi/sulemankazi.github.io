@@ -1,9 +1,9 @@
-## Testing a claim about the muslim call to prayer with open data
+## Fact-checking a claim about the muslim call to prayer with open data
 
 * Table of Contents
 {:toc}
 
-The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe during a period of 24 hours. However after doing this, I remembered that I read an article about a decade ago which claimed that the Azan occurs non-stop around the world. That is, there isn't any time during the year when the Azan isn't happening somewhere in the world. I am curious to know if the claim is true. Trying to search for any evidence for this claim leads to an unsubstantiated, [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe) description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. Let's walk through how we can use python, freely available open datasets and some heuristics to prove/disprove this and see what we find! All source code is open and reproducible. The visualization I made is in the video below and shows how the Azan moves across the world during a 24H period for a given date:
+The original purpose of this writeup was to create a visualization for how the Azan (The Muslim call to the five daily prayers, see details below) moves across the globe during a period of 24 hours. However after doing this, I remembered reading an article about a decade ago which claimed that the Azan occurs non-stop around the world. That is, there isn't any time during the year when the Azan isn't happening somewhere in the world. I am curious to know if the claim is true. Trying to search for any evidence for this claim leads to an unsubstantiated, [vague](https://www.quora.com/Is-the-sound-of-the-Islamic-call-to-prayer-azan-non-stop-across-the-globe) description and some questionable [animations](https://www.youtube.com/watch?v=Q2Rsq6UmfLc) with no data to back them up. This calls for a fact check! Let's walk through how we can use python, freely available data and some heuristics to prove/disprove this and see what we find! All source code is open and reproducible. The visualization I ended up making is in the video below and shows how the Azan moves across the world during a 24H period for a given date:
 
 <p align="center"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/IQg3wbQmg7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
 <p align="center"> </p>
@@ -22,11 +22,11 @@ In order to determine if the original claim is true we have to:
 2. Determine **Azan times** at all locations from step 1 for every day of the year.
 3. Determine if there is any time during the entire year where **none** of the locations above have the Azan happening.
 
-We will use some assumptions during this process, which we'll walk through below. All assumptions made are preceded by the _[Assumption]_  tag.
+We will be using some assumptions during this process, which we'll walk through below. To make these clear, all assumptions made are preceded by the _[Assumption]_ tag.
 
 ### 1. Determine locations where the Azan occurs
 
-Ok first things first, we can't expect the Azan to occur at every single point on the globe. The Azan is given whenever muslims pray **in congregation**. _[Assumption]_  A good proxy for prayer in congregation (and hence a place where the Azan occurs) is a mosque, although muslims frequently pray in congregation outside of mosques as well. Ok great, so we need a way to determine where all mosques are in the world! Such a thing unfortunately does not exist. However a [Deloitte study](https://www2.deloitte.com/xe/en/pages/financial-services/articles/the-digital-islamic-services-landscape.html) estimated there were 3.6 million mosques around the world, projected to reach 3.85 million by 2019. Thus when the study was conducted there was 1 mosque for every 500 muslims in the world.
+Ok first things first, we can't expect the Azan to occur at every single point on the globe. The Azan is given whenever muslims pray **in congregation**. _[Assumption]_  A good proxy for prayer in congregation (and hence a place where the Azan occurs) is a mosque, although muslims frequently pray in congregation outside of mosques as well. Ok great, so we need a way to determine where all mosques are in the world! A dataset listing all mosques in the world does not exist. However a [Deloitte study](https://www2.deloitte.com/xe/en/pages/financial-services/articles/the-digital-islamic-services-landscape.html) estimated there were 3.6 million mosques around the world, projected to reach 3.85 million by 2019. Thus when the study was conducted there was 1 mosque for every 500 muslims in the world. Maybe we can come up with a heuristic absed on this information?
 
 The [GeoNames](https://www.geonames.org/) geographical database provides a list of cities around the globe with a population of >1000, along with their lat/longs and estimated population. Here's what it looks like:
 
@@ -36,18 +36,18 @@ PEW has a [dataset](https://www.pewforum.org/2015/04/02/religious-projection-tab
 
 ![PEW Composition](/imgs/azan/pew_df.png)
 
-We can combine this with the GeoNames dataset. i.e. multiply the city population from GeoNames with the muslim percentage in the country the city is in to find the estimated number of muslims in each city. _[Assumption]_ We're ignoring all rural (non-city) areas and assuming that the PEW country-wide percentages are applicable to cities. Since this assumption is in all likelihood, not valid, we'll compensate for it by only considering cities with >1000 muslims, double the 1:500 mosque:muslim ratio we saw above (and Assuming such cities will have a mosque or a prayer in congregation). 
+Ok let's combine all these sources of information: Multiply the city population from GeoNames with the muslim percentage in the country the city is in to find the estimated number of muslims in each city. _[Assumption]_ We're ignoring all rural (non-city) areas and assuming that the PEW country-wide percentages are applicable to cities. Since this assumption is in all likelihood, not valid, we'll compensate for it by only considering cities with > 1000 muslims, double the 1:500 mosque:muslim ratio we saw above (and Assuming such cities will have a mosque or a prayer in congregation). 
 
-Ok, now we need to verify that our assumptions make sense. Some Googe-Maps searches for "mosque" in a randomly selected sample of the cities we find using the criteria above shows that this assumption is reasonable, and most of them do indeed have mosques. The only exception I found to this rule was in places where the PEW survey had estimated a Muslim population of 1%. I assume this happened because PEW rounds up all population numbers in the range [0 - 1]% to 1%, so we'll special case such countries, and our final heuristic for filtering cities will be:
+Ok, we've been making a lot of assumptions but do they actually make sense? Some Googe-Maps searches for "mosque" in a randomly selected sample of the cities we find using the criteria above shows that this assumption is reasonable, and pretty much all of them do indeed have mosques. The only exception I found to this rule was in places where the PEW survey had estimated a Muslim population of 1%. I assume this happened because PEW rounds up all population numbers in the range [0 - 1]% to 1%, so we'll special case such countries, and our final heuristic for filtering cities will be:
 
 * If a country has a >1% Muslim population:
   * Only include cities where the estimated muslim population in the city >1000
 * If a country has a <=1% Muslim population:
-  * Only include **big** cities (population > 1 million).
+  * Only include **major** cities (population > 1 million).
 * If a city's population is unavailable (which is the case for some cities in the GeoNames dataset):
   * Only include cities in countries with a muslim population >50%
 
-Our final heuristic is tuned towards **precision** rather than **recall**, since the criteria for inclusion is strict and we're less concerned with missing some cities with mosques/muslims-praying-in-congregation, and more concerned about our heuristic being strict enough to not over-count. The original dataset has more ~1.2 Million cities, after applying our filter, we're left with just **23006**. These cities are mapped using kepler.gl in the image below, the colour represents the country they are located in, the size is weighted by population:
+Our final heuristic is tuned towards **precision** rather than **recall** meaning the criteria for inclusion is strict and we're less concerned with missing some cities with mosques/muslims-praying-in-congregation, and more concerned about our heuristic being strict enough to not over-count. The original dataset has more ~1.2 Million cities, after applying our filter, we're left with just **23006**. These cities are mapped using kepler.gl in the image below, the colour represents the country they are located in, the size is weighted by population:
 
 ![A map of filtered cities](/imgs/azan/all_cities.png)
 
@@ -71,13 +71,13 @@ After uploading the data, this is what we end up with (for a given time range):
 
 ![Kepler Visualization](/imgs/azan/kepler_vis.png)
 
-Each dot represents one of our filtered cities at the time (within our range) when Azan occurs there, the color represents which of the five prayers the Azan is for. The video at the top of this article shows this animated for one day. Someone with more webdev experience can probably make this into a live-view thing where there's a live map hosted showing you where in the world the Azan is occuring in realtime.
+Each dot represents one of our filtered cities at the time (within our range) when Azan occurs there, the color represents which of the five prayers the Azan is for. The video at the top of this article shows this animated for one day. Someone with more webdev experience can probably make this into a live-view  where there's a live map showing you where in the world the Azan is occuring in realtime.
 
 ### 4. Check if the Azan is continuously occuring
 
-Let's generate the azan time data for each city by looping over each day in the eyar. For each day we will check if for **each minute** of the day, there is atleast **1** city in our list where we have the Azan. Technically since the Azan is about 2-3 minutes long, we can get away with checking every other minute. However remember we said we're focusing on precision, not recall so we'll just check every minute. After stuffing our time-check into a loopwe find that there is **no minute** where the Azan isn't occurring somewhere on Earth. There are 11 (non-contiguous) minutes in the whole year where it occurs at only three cities, but I have manually verified the presence of a mosque **in** or **near** those cities.
+Let's generate the azan time data for each city by looping over each day in the year. For each day we will check if for **each minute** of the day, there is atleast **1** city in our list where we have the Azan. Technically since the Azan is about 2-3 minutes long, we can get away with checking every other minute. However remember we said we're focusing on precision, not recall so we'll just check every minute. After stuffing our time-check into a loop we find that there is **no minute** where the Azan isn't occurring somewhere in the world. There are 11 (non-contiguous) minutes in the whole year where it occurs at only three cities, which is the 'weakest link' but I have manually verified the presence of a mosque **in** or **near** those cities via Google Maps.
 
-There we have it! An answer to a question I had a decade ago. Keeping in mind we made some assumptions this of course isn't a **definitive** answer, but it's a good enough approximation for me to be confident that the results are valid!
+There we have it! An answer to a question I had a decade ago. Keeping in mind we made some assumptions this of course isn't a **definitive** answer, but it's a good enough approximation for me to be confident that the results are valid! If someone would like to point out any obvious flaws or criticisms I would be happy to hear/update this article!
 
 ## Source Code
 
