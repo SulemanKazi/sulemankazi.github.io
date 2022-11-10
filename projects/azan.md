@@ -1,5 +1,7 @@
 ## Fact-checking a claim about the muslim call to prayer with open data
 
+![A map of filtered cities](/imgs/azan/all_cities.png)
+
 * Table of Contents
 {:toc}
 
